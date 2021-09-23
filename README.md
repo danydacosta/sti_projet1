@@ -1,1 +1,4 @@
-# sti_projet1
+# Projet 1 STI
+
+
+## 1. Installation Docker
