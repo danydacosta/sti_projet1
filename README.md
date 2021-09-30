@@ -13,13 +13,13 @@
 ## Répartition tâches
 
 ### Dany
-  index -> affichage des messages liste
-  détails -> détails d'un message
-  nouveau message -> écrire un nouveau message
+  index -> affichage des messages liste  
+  détails -> détails d'un message  
+  nouveau message -> écrire un nouveau message  
 
 ### Stefan
-  configuration user -> changement du mdp
-  admin -> CRUD utilisateurs
-    new user
+  configuration user -> changement du mdp  
+  admin -> CRUD utilisateurs  
+    new user  
     update user
   
