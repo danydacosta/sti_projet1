@@ -1,4 +1,9 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['userLogin'])) {
+        header('Location: login.php');
+    }
+
     include('dbConnect.php');
 
     $messages =  $file_db->query('SELECT * FROM message')->fetchAll();
