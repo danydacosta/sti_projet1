@@ -6,10 +6,25 @@
             include 'dbConnect.php';
 
             $login = $_POST['inputLogin'];
+            $password = $_POST['inputPassword'];
 
             $result = $file_db->query("SELECT * FROM user WHERE login = '{$login}'");
-            print_r($result->fetch());
-            //print_r($result);
+            $data = $result->fetch();
+
+            if (! empty($data)) {                       // Si vide, le user n'existe pas dans la base
+                if($password == $data["password"]) {    // Credentials justes, login accepté
+                    session_start();
+                    $_SESSION["userLogin"] = $login;
+                    header('Location: '."index.php");
+                    exit;
+                } else {
+                    echo "<script type='text/javascript'>alert('Login failed');</script>";
+                }
+            } else {
+                echo "<script type='text/javascript'>alert('User does not exist');</script>";
+            }
+
+
         } catch(PDOException $e) {
             // Print PDOException message
             echo $e->getMessage();

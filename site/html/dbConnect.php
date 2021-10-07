@@ -15,4 +15,4 @@
         // Print PDOException message
         echo $e->getMessage();
     }
-?>
+
