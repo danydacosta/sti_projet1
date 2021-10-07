@@ -14,35 +14,36 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="col">
+    <div class="wrapper container">
+        <div class="row">
+            <div class="col">
 
-        </div>
-        <div class="col col-md-6">
-            <br />
-            <h1>Ecrire un nouveau message</h1>
-            <hr>
-            <form>
-                <div class="form-group">
-                    <label for="exampleFormControlInput1">Destinataire</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="doej">
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Message</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
+            </div>
+            <div class="col col-md-6">
                 <br />
-                <button type="submit" class="btn btn-success">
-                    Envoyer
-                </button>
-            </form>
+                <h1>Ecrire un nouveau message</h1>
+                <hr>
+                <form>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Destinataire</label>
+                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="doej">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Message</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-success">
+                        Envoyer
+                    </button>
+                </form>
 
-        </div>
-        <div class="col">
+            </div>
+            <div class="col">
 
+            </div>
         </div>
     </div>
-
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
