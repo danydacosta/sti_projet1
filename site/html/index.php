@@ -4,7 +4,11 @@
         header('Location: login.php');
     }
 
-    include('dbConnect.php');
+    include_once 'dbConnect.php';
+    include_once 'utils.php';
+
+    $user = $_SESSION['userLogin'];
+    $userAdmin = checkAdmin($user);  // Boolean pour dire si admin ou pas. true = admin, false pas admin
 
     $messages =  $file_db->query('SELECT * FROM message')->fetchAll();
 ?>
@@ -33,6 +37,11 @@
             <div class="col col-md-6">
                 <b>Bienvenue, <?php echo $_SESSION['userLogin']?></b>
                 <button type="button" class="btn btn-warning" onclick='window.location.href = "changeMdp.php"'>Changer le MDP</button>
+                <?php
+                    if ($userAdmin) {
+                        echo '<button type="button" class="btn btn-warning" onclick=\'window.location.href = "gestUsers.php"\'>Gestion users</button>';
+                    }
+                ?>
 
                 <br />
                 <h1>Messages</h1>
