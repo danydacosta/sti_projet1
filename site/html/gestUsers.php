@@ -45,7 +45,7 @@
             <h1>Utilisateurs</h1>
             <br />
 
-            <button type="button" class="btn btn-success" onclick='window.location.href = "new_msg.php"'>
+            <button type="button" class="btn btn-success" onclick='window.location.href = "addUser.php"'>
                 Ajouter un utilisateur
             </button>
             <br />
