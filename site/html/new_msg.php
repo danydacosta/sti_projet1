@@ -11,12 +11,13 @@
         // vérifier que le destinataire est un utilisateur valide et que l'utilisateur ne s'envoie pas un message
         if(empty($destinataire) || $destinataire['login'] == $_SESSION['userLogin']) {
             $error = true;
+        } else {
+            $file_db->exec("INSERT INTO message (expediteur, destinataire, date, sujet, corps) 
+            VALUES ('".$_SESSION['userLogin']."', '".$_POST['destinataire']."', '".date_timestamp_get(date_create())."', '".$_POST['sujet']."', '".$_POST['corps']."')");
+    
+            $success = true;
+            header("Refresh:3; url=index.php");
         }
-
-        $file_db->exec("INSERT INTO message (expediteur, destinataire, date, sujet, corps) 
-                VALUES ('".$_SESSION['userLogin']."', '".$_POST['destinataire']."', '".date_timestamp_get(date_create())."', '".$_POST['sujet']."', '".$_POST['corps']."')");
-        
-        $success = true;
     }
 ?>
 <!DOCTYPE html>
@@ -48,7 +49,7 @@
                             </div>';
                     } else if ($success) {
                         echo '<div class="alert alert-success" role="alert">
-                                Message envoyé !
+                                Message envoyé ! Redirection dans 3 secondes...
                             </div>';
                     }
                 ?>
@@ -63,7 +64,7 @@
                     <br>
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Sujet</label>
-                        <input required class="form-control" name="sujet" placeholder="Mon message" value="<?php echo $_POST['sujet']; ?>">
+                        <input required class="form-control" name="sujet" placeholder="Mon message" value="<?php if(isset($_POST['sujet'])) { echo $_POST['sujet']; } else { echo $_GET['sujet']; } ?>">
                     </div>
                     <br>
                     <div class="form-group">
