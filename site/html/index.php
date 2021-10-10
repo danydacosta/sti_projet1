@@ -6,7 +6,7 @@
 
     include('dbConnect.php');
 
-    $messages =  $file_db->query('SELECT * FROM message')->fetchAll();
+    $messages =  $file_db->query('SELECT * FROM message WHERE destinataire = "'.$_SESSION['userLogin'].'"')->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
