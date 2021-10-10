@@ -1,7 +1,22 @@
 <?php
     session_start();
+    $error = false;
+    $success = false;
+
     if(!isset($_SESSION['userLogin'])) {
         header('Location: login.php');
+    } if(isset($_POST['submit'])) {
+        include('dbConnect.php');
+        $destinataire = $file_db->query('SELECT * FROM user WHERE login = "'.$_POST['destinataire'].'"')->fetch();
+        // vérifier que le destinataire est un utilisateur valide et que l'utilisateur ne s'envoie pas un message
+        if(empty($destinataire) || $destinataire['login'] == $_SESSION['userLogin']) {
+            $error = true;
+        }
+
+        $file_db->exec("INSERT INTO message (expediteur, destinataire, date, sujet, corps) 
+                VALUES ('".$_SESSION['userLogin']."', '".$_POST['destinataire']."', '".date_timestamp_get(date_create())."', '".$_POST['sujet']."', '".$_POST['corps']."')");
+        
+        $success = true;
     }
 ?>
 <!DOCTYPE html>
@@ -26,20 +41,37 @@
 
             </div>
             <div class="col col-md-6">
+                <?php
+                    if($error) {
+                       echo '<div class="alert alert-danger" role="alert">
+                                Erreur ! Ce destinataire n\'existe pas
+                            </div>';
+                    } else if ($success) {
+                        echo '<div class="alert alert-success" role="alert">
+                                Message envoyé !
+                            </div>';
+                    }
+                ?>
                 <br />
                 <h1>Ecrire un nouveau message</h1>
                 <hr>
-                <form>
+                <form action="" method="post">
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Destinataire</label>
-                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="doej">
+                        <input required class="form-control" name="destinataire" placeholder="doej" value="<?php echo $_GET['dest']; ?>">
                     </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Sujet</label>
+                        <input required class="form-control" name="sujet" placeholder="Mon message" value="<?php echo $_POST['sujet']; ?>">
+                    </div>
+                    <br>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Message</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea required class="form-control" name="corps" rows="3"><?php echo $_POST['corps']; ?></textarea>
                     </div>
                     <br />
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success" name="submit">
                         Envoyer
                     </button>
                 </form>
