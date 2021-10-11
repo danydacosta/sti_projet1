@@ -4,17 +4,17 @@
         header('Location: login.php');
     }
 
-    if(isset($_GET['disconnect'])) {
+    $user = $_SESSION['userLogin'];
+    include_once 'utils.php';
+
+    if(isset($_GET['disconnect']) || !checkValid($user)) {
         unset($_SESSION['userLogin']);
         header('Location: login.php');
     }
 
     include('dbConnect.php');
-    include_once 'utils.php';
 
-    $user = $_SESSION['userLogin'];
     $userAdmin = checkAdmin($user);  // Boolean pour dire si admin ou pas. true = admin, false pas admin
-
     $messages =  $file_db->query('SELECT * FROM message WHERE destinataire = "'.$_SESSION['userLogin'].'"')->fetchAll();
 
     if(isset($_GET['del'])) {

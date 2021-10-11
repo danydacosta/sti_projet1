@@ -27,4 +27,10 @@
         return $userAdmin['admin'] == 1;    // true si le user est admin
     }
 
+    function checkValid($login) {
+        $file_db = dbConnection();
+        $userValid = $file_db->query("SELECT validite FROM user WHERE login = '{$login}'")->fetch();
+        return $userValid['validite'] == 1;    // true si le user est valide
+    }
+
 ?>
