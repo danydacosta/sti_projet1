@@ -13,6 +13,8 @@ docker exec -u root sti_project service nginx start
 docker exec -u root sti_project service php5-fpm start
 ```
 
+L'application est ensuite accessible à l'adresse http://localhost:8080/
+
 ## Utilisation de l'application
 
 Deux utilisateurs existent déjà dans la base de données :
