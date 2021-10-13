@@ -1,25 +1,23 @@
 # Projet 1 STI
 
 
-## 1. Installation Docker
+## Installation sur Docker
 
-`docker run -ti -v "$PWD/site":/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018`
+Le script `start.sh` peut être utilisé afin d'automatiser le processus de création du container et démarrage de service. Il est aussi possible d'utiliser les commandes ci-dessous :
 
-`docker exec -u root sti_project service nginx start`
+```
+docker run -ti -v "$PWD/site":/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
 
-`docker exec -u root sti_project service php5-fpm start`
+docker exec -u root sti_project service nginx start
 
+docker exec -u root sti_project service php5-fpm start
+```
 
-## Répartition tâches
+## Utilisation de l'application
 
-### Dany
-  index -> affichage des messages liste  
-  détails -> détails d'un message  
-  nouveau message -> écrire un nouveau message  
+Deux utilisateurs existent déjà dans la base de données :
 
-### Stefan
-  configuration user -> changement du mdp  
-  admin -> CRUD utilisateurs  
-    new user  
-    update user
-  
+| Login   | Mdp  | Admin |
+|---------|------|-------|
+| dupontj | pass | non   |
+| doej    | pass | oui   |
