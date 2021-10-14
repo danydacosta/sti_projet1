@@ -27,3 +27,8 @@ Deux utilisateurs existent déjà dans la base de données :
 |---------|------|-------|
 | dupontj | pass | non   |
 | doej    | pass | oui   |
+
+
+## Remarques  
+
+Lorsque nous récupérons des données entrées par l'utilisateur, nous avons fait aucun escape de caractères spéciaux. Ceci veut dire que si l'on insère des apostrophes, par exemple dans un contenu email, des erreurs peuvent se produire... sûrement utile pour la suite lors des attaques :)
