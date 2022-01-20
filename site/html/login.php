@@ -16,7 +16,7 @@
             if (! empty($data)) { // Si vide, le user n'existe pas dans la base
                 if($data['validite'] == 0) {
                     echo "<script type='text/javascript'>alert('Login failed');</script>";
-                } else if($password == $data["password"]) {    // Credentials justes, login accepté
+                } else if(hash('sha256', $password) == $data["password"]) {    // Credentials justes, login accepté
                     session_start();
                     $_SESSION["userLogin"] = $login;
                     header('Location: '."index.php");
