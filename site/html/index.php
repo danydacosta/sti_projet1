@@ -15,7 +15,10 @@
     include('dbConnect.php');
 
     $userAdmin = checkAdmin($user);  // Boolean pour dire si admin ou pas. true = admin, false pas admin
-    $messages =  $file_db->query('SELECT * FROM message WHERE destinataire = "'.$_SESSION['userLogin'].'"')->fetchAll();
+
+    $sth = $file_db->prepare('SELECT * FROM message WHERE destinataire = ?');
+    $sth->execute(array($_SESSION['userLogin']));
+    $messages = $sth->fetchAll();
 
     if(isset($_GET['del'])) {
         // le message à supprimer doit être un message de l'utilisateur
@@ -28,7 +31,8 @@
         } 
 
         if($found) {
-            $file_db->exec("DELETE FROM message WHERE id = ".$_GET['del']);
+            $sth = $file_db->prepare('DELETE FROM message WHERE id = ?');
+            $sth->execute(array($_GET['del']));
         }
     }
 ?>
@@ -101,7 +105,10 @@
                     <tbody>
                         <?php
                             foreach($messages as $row) {
-                                $expeditor = $file_db->query('SELECT prenom, nom FROM user WHERE login = "'.$row['expediteur'].'"')->fetch();
+                                $sth = $file_db->prepare('SELECT prenom, nom FROM user WHERE login =  ?');
+                                $sth->execute(array($row['expediteur']));
+                                $expeditor = $sth->fetch();
+
                                 echo '<tr>
                                         <td>'.date('d.m.Y', $row['date']).'</td>
                                         <td>'.$expeditor['prenom'].' '.$expeditor['nom'].'</td>

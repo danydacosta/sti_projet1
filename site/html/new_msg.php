@@ -12,13 +12,20 @@
         header('Location: login.php');
     } if(isset($_POST['submit'])) {
         include('dbConnect.php');
-        $destinataire = $file_db->query('SELECT * FROM user WHERE login = "'.$_POST['destinataire'].'"')->fetch();
+        $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
+        $sth->execute(array($_POST['destinataire']));
+        $destinataire = $sth->fetch();
+
+        //$destinataire = $file_db->query('SELECT * FROM user WHERE login = "'.$_POST['destinataire'].'"')->fetch();
         // vérifier que le destinataire est un utilisateur valide et que l'utilisateur ne s'envoie pas un message
         if(empty($destinataire) || $destinataire['login'] == $_SESSION['userLogin']) {
             $error = true;
         } else {
-            $file_db->exec("INSERT INTO message (expediteur, destinataire, date, sujet, corps) 
-            VALUES ('".$_SESSION['userLogin']."', '".$_POST['destinataire']."', '".date_timestamp_get(date_create())."', '".$_POST['sujet']."', '".$_POST['corps']."')");
+            $sth = $file_db->prepare('INSERT INTO message (expediteur, destinataire, date, sujet, corps) VALUES (?, ?, ?, ?, ?)');
+            $sth->execute(array($_SESSION['userLogin'], $_POST['destinataire'], date_timestamp_get(date_create()), $_POST['sujet'], $_POST['corps']));
+
+            //$file_db->exec("INSERT INTO message (expediteur, destinataire, date, sujet, corps) 
+            //VALUES ('".$_SESSION['userLogin']."', '".$_POST['destinataire']."', '".date_timestamp_get(date_create())."', '".$_POST['sujet']."', '".$_POST['corps']."')");
     
             $success = true;
             header("Refresh:3; url=index.php");

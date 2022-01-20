@@ -12,7 +12,9 @@
 
     if (isset($_POST['login'])) {
         $file_db = dbConnection();
-        $file_db->exec("INSERT INTO user (login, nom, prenom, password, validite, admin) VALUES ('{$_POST['login']}', '{$_POST['nom']}', '{$_POST['prenom']}', '{$_POST['password']}', {$_POST['validite']}, {$_POST['admin']})");
+        $sth = $file_db->prepare('INSERT INTO user (login, nom, prenom, password, validite, admin) VALUES (?, ?, ?, ?, ?, ?)');
+        $sth->execute(array($_POST['login'], $_POST['nom'], $_POST['prenom'], $_POST['password'], $_POST['validite'], $_POST['admin']));
+
         header('Location: index.php');
     }
 

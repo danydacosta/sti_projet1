@@ -23,13 +23,19 @@
 
     function checkAdmin($login) {
         $file_db = dbConnection();
-        $userAdmin = $file_db->query("SELECT admin FROM user WHERE login = '{$login}'")->fetch();
+        $sth = $file_db->prepare('SELECT admin FROM user WHERE login = ?');
+        $sth->execute(array($login));
+        $userAdmin = $sth->fetch();
+
         return $userAdmin['admin'] == 1;    // true si le user est admin
     }
 
     function checkValid($login) {
         $file_db = dbConnection();
-        $userValid = $file_db->query("SELECT validite FROM user WHERE login = '{$login}'")->fetch();
+        $sth = $file_db->prepare('SELECT validite FROM user WHERE login = ?');
+        $sth->execute(array($login));
+        $userValid = $sth->fetch();
+        
         return $userValid['validite'] == 1;    // true si le user est valide
     }
 

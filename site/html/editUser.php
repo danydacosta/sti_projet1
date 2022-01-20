@@ -9,7 +9,10 @@
     $file_db = dbConnection();
 
     if (isset($_POST['validite'])) {    // Traitement d'un submit pour une mise à jour
-        $file_db->exec("UPDATE user SET validite = {$_POST['validite']}, admin = {$_POST['role']}, password = '{$_POST['password']}' WHERE login = '{$_POST['inputLogin']}'");
+        $sth = $file_db->prepare('UPDATE user SET validite = ?, admin = ?, password = ? WHERE login = ?');
+        $sth->execute(array($_POST['validite'], $_POST['role'], $_POST['password'], $_POST['inputLogin']));
+
+        //$file_db->exec("UPDATE user SET validite = {$_POST['validite']}, admin = {$_POST['role']}, password = '{$_POST['password']}' WHERE login = '{$_POST['inputLogin']}'");
         header('Location: index.php');
     }
 
@@ -27,8 +30,10 @@
         header('Location: index.php');
     }
 
-    $userData = $file_db->query("SELECT login, validite, admin, password FROM user WHERE login = '{$userToEdit}'")->fetch();
-
+    $sth = $file_db->prepare('SELECT login, validite, admin, password FROM user WHERE login = ?');
+    $sth->execute(array($userToEdit));
+    $userData = $sth->fetch();
+    //$userData = $file_db->query("SELECT login, validite, admin, password FROM user WHERE login = '{$userToEdit}'")->fetch();
 ?>
 
 

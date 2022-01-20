@@ -1,6 +1,5 @@
 <?php
 
-// TODO: S'assurer que le user www-data puisse écrire dans la BDD ainsi que le dossier contenant le sqlite (pour les INSERT).
     session_start();
     $user = "";
     if(!isset($_SESSION['userLogin'])) {
@@ -16,7 +15,9 @@
 
         } else {    // Changement du mdp
             include 'dbConnect.php';
-            $file_db->exec("UPDATE user SET password = '{$password}' WHERE login = '{$user}'");
+
+            $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
+            $sth->execute(array($password, $user));
             header('Location: index.php');
         }
     }
@@ -57,14 +58,6 @@
     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Valider">
 </form>
 
-<script>
-    // document.getElementById("inputPassword2").addEventListener("focusout", function() {
-    //     if (document.getElementById("inputPassword2").value === document.getElementById("inputPassword").value) {
-    //         document.getElementById("inputPassword2").value = "";
-    //         alert("Les mots de passe ne correspondent pas");
-    //     }
-    // });
-</script>
 
 </body>
 </html>

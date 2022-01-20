@@ -14,7 +14,10 @@
     }
 
     $file_db = dbConnection();
-    $file_db->exec("DELETE FROM user WHERE login = '{$_GET['login']}'");
+    $sth = $file_db->prepare('DELETE FROM user WHERE login = ?');
+    $sth->execute(array($_GET['login']));
+    
+    //$file_db->exec("DELETE FROM user WHERE login = '{$_GET['login']}'");
     header('Location: index.php');
 
 ?>

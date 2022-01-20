@@ -8,8 +8,10 @@
             $login = $_POST['inputLogin'];
             $password = $_POST['inputPassword'];
 
-            $result = $file_db->query("SELECT * FROM user WHERE login = '{$login}'");
-            $data = $result->fetch();
+            $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
+            $sth->execute(array($login));
+
+            $data = $sth->fetch();
 
             if (! empty($data)) { // Si vide, le user n'existe pas dans la base
                 if($data['validite'] == 0) {

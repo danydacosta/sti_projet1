@@ -12,8 +12,9 @@
     }
 
     include('dbConnect.php');
-
-    $message =  $file_db->query('SELECT * FROM message WHERE id = "'.$_GET['id'].'"')->fetch();
+    $sth = $file_db->prepare('SELECT * FROM message WHERE id = ?');
+    $sth->execute(array($_GET['id']));
+    $message = $sth->fetch();
 
     $destinataire = $message['destinataire'];
     $userLogin = $_SESSION['userLogin'];
