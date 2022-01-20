@@ -37,7 +37,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Détails de <?php echo $message['sujet']; ?></title>
+    <title>Détails de <?php echo htmlspecialchars($message['sujet']); ?></title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -69,14 +69,14 @@
                 </div>
                 <br />
                 <?php
-                echo '<h1>'.$message['sujet'].'</h1>
+                echo '<h1>'.htmlspecialchars($message['sujet']).'</h1>
                 <br />
-                <h5><b>Date de réception : </b> '.date('d.m.Y', $message['date']).'</h5>
+                <h5><b>Date de réception : </b> '.date('d.m.Y', htmlspecialchars($message['date'])).'</h5>
                 <h5><b>Expéditeur : </b> '.$message['expediteur'].'</h5>
                 <hr>
                 <h5><b>Corps : </b></h5>
                 <p>
-                    '.$message['corps'].'
+                    '.htmlspecialchars($message['corps']).'
                 </p>';
                 ?>
             </div>

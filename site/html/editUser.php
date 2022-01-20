@@ -93,11 +93,11 @@
 <form class="form-signin" method="POST">
     <h1 class="h3 mb-3 font-weight-normal">Modifier utilisateur</h1>
     <label for="inputLogin" class="sr-only">Login</label>
-    <input type="text" id="inputLogin" name="inputLogin" class="form-control" placeholder="Login" value="<?php echo $userData['login'] ?>" readonly>
+    <input type="text" id="inputLogin" name="inputLogin" class="form-control" placeholder="Login" value="<?php echo htmlspecialchars($userData['login']) ?>" readonly>
     <label for="validite" class="sr-only">Validite (1 = actif)</label>
-    <input type="text" id="validite" name="validite" class="form-control" value="<?php echo $userData['validite'] ?>" required>
+    <input type="text" id="validite" name="validite" class="form-control" value="<?php echo htmlspecialchars(($userData['validite'])) ?>" required>
     <label for="role" class="sr-only">Rôle (admin = 1)</label>
-    <input type="text" id="role" name="role" class="form-control" value="<?php echo $userData['admin'] ?>" required>
+    <input type="text" id="role" name="role" class="form-control" value="<?php echo htmlspecialchars(($userData['admin'])) ?>" required>
     <label for="password" class="sr-only">Mot de passe</label>
     <input type="password" id="password" name="password" class="form-control" required>
     <br>

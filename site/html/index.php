@@ -116,9 +116,9 @@
                                 $expeditor = $sth->fetch();
 
                                 echo '<tr>
-                                        <td>'.date('d.m.Y', $row['date']).'</td>
-                                        <td>'.$expeditor['prenom'].' '.$expeditor['nom'].'</td>
-                                        <td>'.$row['sujet'].'</td>
+                                        <td>'.date('d.m.Y', htmlspecialchars($row['date'])).'</td>
+                                        <td>'.htmlspecialchars($expeditor['prenom']).' '.htmlspecialchars($expeditor['nom']).'</td>
+                                        <td>'.htmlspecialchars($row['sujet']).'</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm" onclick=\'window.location.href = "/new_msg.php?dest='.$row['expediteur'].'&sujet=RE: '.$row['sujet'].'"\'>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
