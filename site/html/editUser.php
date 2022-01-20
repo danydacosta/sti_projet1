@@ -58,7 +58,7 @@
                         echo "<script type='text/javascript'>alert('Validite and role value must be 0 or 1');</script>";
                     }
                 } else {
-                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length, contain a number and an upper case');</script>";
                 }
             } else {
                 echo "<script type='text/javascript'>alert('User does not exists');</script>";

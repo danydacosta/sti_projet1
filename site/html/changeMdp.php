@@ -32,7 +32,7 @@
                         $sth->execute(array(hash('sha256', $password), $user));
                         header('Location: index.php');
                     } else {
-                        echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                        echo "<script type='text/javascript'>alert('Password must be min 8 caracters length, contain a number and an upper case');</script>";
                     }
                 } else {
                     echo "<script type='text/javascript'>alert('Les mots de passe ne correspondent pas');</script>";
