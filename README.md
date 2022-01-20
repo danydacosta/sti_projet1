@@ -1,5 +1,6 @@
-# Projet 1 STI
+# Projet 2 STI
 
+Le projet s'appelle sti_projet1 mais nous sommes bien sur le projet 2 :)
 
 ## Installation sur Docker
 
@@ -25,10 +26,6 @@ Deux utilisateurs existent déjà dans la base de données :
 
 | Login   | Mdp  | Admin |
 |---------|------|-------|
-| dupontj | pass | non   |
-| doej    | pass | oui   |
+| dupontj | Pass1234 | non   |
+| doej    | Pass1234 | oui   |
 
-
-## Remarques  
-
-Lorsque nous récupérons des données entrées par l'utilisateur, nous avons fait aucun escape de caractères spéciaux. Ceci veut dire que si l'on insère des apostrophes, par exemple dans un contenu email, des erreurs peuvent se produire... sûrement utile pour la suite lors des attaques :)
