@@ -39,4 +39,13 @@
         return $userValid['validite'] == 1;    // true si le user est valide
     }
 
+    function passwordPolicy($password){
+        $policy = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
+        $policy2 =  '/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/';
+        if(!preg_match($policy,$password)){
+            return false;
+        }
+        return true;
+    }
+
 ?>

@@ -7,13 +7,14 @@
     } else {
         $user = $_SESSION['userLogin'];
     }
-
+    include_once 'utils.php';
     if(isset($_POST['sbmt-edit'])) {
         if(isset($_POST['inputPassword']) && isset($_POST['inputPassword2'])) {
             $password = $_POST['inputPassword'];
             if ($password == $_POST['inputPassword2']) {
                 // Vérifier que le mot de passe contient au moins 8 char et un chiffre
-                if(strlen($_POST['inputPassword']) >= 8 && preg_match('~[0-9]+~', $_POST['inputPassword'])) {
+                //passwordPolicy($_POST['inputPassword'])
+                if(passwordPolicy($_POST['inputPassword'])) {
                     include 'dbConnect.php';
     
                     $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');

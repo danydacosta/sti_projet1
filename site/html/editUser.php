@@ -37,7 +37,7 @@
     
             if (!empty($data)) {
                 // Vérifier que le mot de passe contient au moins 8 char et un chiffre
-                if(strlen($_POST['password']) >= 8 && preg_match('~[0-9]+~', $_POST['password'])) {
+                if(passwordPolicy($_POST['password'])) {
                     // Les valeurs pour validite et role doivent être 1 ou 0
                     if(($_POST['validite'] == '0' || $_POST['validite'] == '1') && ($_POST['role'] == '0' || $_POST['role'] == '1')) {
                         $sth = $file_db->prepare('UPDATE user SET validite = ?, admin = ?, password = ? WHERE login = ?');
