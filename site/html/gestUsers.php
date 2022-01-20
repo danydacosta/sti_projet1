@@ -63,9 +63,9 @@
                 <?php
                 foreach($messages as $row) {
                     echo '<tr>
-                                        <td>'.$row['login'].'</td>
-                                        <td>'.$row['validite'].'</td>
-                                        <td>'.$row['admin'].'</td>
+                                        <td>'.htmlspecialchars($row['login']).'</td>
+                                        <td>'.htmlspecialchars($row['validite']).'</td>
+                                        <td>'.htmlspecialchars($row['admin']).'</td>
                                         <td>
                                             <button type="button" class="btn btn-warning btn-sm" onclick=\'window.location.href = "editUser.php?login='.$row['login'].'"\'>
                                                 Modifier
