@@ -10,15 +10,37 @@
         header('Location: index.php');
     }
 
-    if (isset($_POST['login'])) {
-        $file_db = dbConnection();
-        $sth = $file_db->prepare('INSERT INTO user (login, nom, prenom, password, validite, admin) VALUES (?, ?, ?, ?, ?, ?)');
-        $sth->execute(array($_POST['login'], $_POST['nom'], $_POST['prenom'], hash('sha256', $_POST['password']), $_POST['validite'], $_POST['admin']));
-
-        header('Location: index.php');
+    if(isset($_POST['sbm-user'])) {
+        if (isset($_POST['login']) && isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['password']) && isset($_POST['validite']) && isset($_POST['admin'])) {
+            $file_db = dbConnection();
+    
+            // Vérifier que l'utilisateur n'existe pas déjà
+            $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
+            $sth->execute(array($_POST['login']));
+            $data = $sth->fetch();
+    
+            if (empty($data)) {
+                // Vérifier que le mot de passe contient au moins 8 char et un chiffre
+                if(strlen($_POST['password']) >= 8 && preg_match('~[0-9]+~', $_POST['password'])) {
+                    // Les valeurs pour validite et admin doivent être 1 ou 0
+                    if(($_POST['validite'] == '0' || $_POST['validite'] == '1') && ($_POST['admin'] == '0' || $_POST['admin'] == '1')) {
+                        $sth = $file_db->prepare('INSERT INTO user (login, nom, prenom, password, validite, admin) VALUES (?, ?, ?, ?, ?, ?)');
+                        $sth->execute(array($_POST['login'], $_POST['nom'], $_POST['prenom'], hash('sha256', $_POST['password']), $_POST['validite'], $_POST['admin']));
+            
+                        header('Location: index.php');
+                    } else {
+                        echo "<script type='text/javascript'>alert('Validite and admin value must be 0 or 1');</script>";
+                    }
+                } else {
+                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                }
+            } else {
+                echo "<script type='text/javascript'>alert('User already exists');</script>";
+            }   
+        } else {
+            echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
+        }
     }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +50,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Ecrire un nouveau message</title>
+    <title>Ajouter un nouveau user</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -71,7 +93,7 @@
                     <input type="text" class="form-control" id="admin" name="admin" required>
                 </div>
                 <br />
-                <input type="submit" class="btn btn-lg btn-warning btn-block" value="Ajouter">
+                <input type="submit" name="sbm-user" class="btn btn-lg btn-warning btn-block" value="Ajouter">
             </form>
 
         </div>
