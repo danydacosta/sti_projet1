@@ -1,38 +1,59 @@
 <?php
-    if(isset($_POST['sbmt-login'])) {
+    session_start();
+
+    if(!isset($_SESSION['attempt'])){
+        $_SESSION['attempt']=0;
+    }
+    if(isset($_SESSION['attempt_again'])) {
+        $now = time();
+        if ($now >= $_SESSION['attempt_again']) {
+            unset($_SESSION['attempt']);
+            unset($_SESSION['attempt_again']);
+        }
+    }
+
+    if (isset($_POST['sbmt-login'])) {
         if (isset($_POST['inputLogin']) && isset($_POST['inputPassword'])) {
             try {
                 include 'dbConnect.php';
-    
+
                 $login = $_POST['inputLogin'];
                 $password = $_POST['inputPassword'];
-    
+
                 $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
                 $sth->execute(array($login));
                 $data = $sth->fetch();
-    
-                if (! empty($data)) { // Si vide, le user n'existe pas dans la base
-                    if($data['validite'] == 0) {
+
+                if (!empty($data)) { // Si vide, le user n'existe pas dans la base
+                    if ($data['validite'] == 0) {
                         echo "<script type='text/javascript'>alert('Login failed');</script>";
-                    } else if(hash('sha256', $password) == $data["password"]) {    // Credentials justes, login accepté
-                        session_start();
+                    } else if (hash('sha256', $password) == $data["password"]) {    // Credentials justes, login accepté
                         $_SESSION["userLogin"] = $login;
                         $_SESSION['csrf_token'] = md5(uniqid(mt_rand(), true));
-                        header('Location: '."index.php");
+                        header('Location: ' . "index.php");
                         exit;
                     } else {
-                        echo "<script type='text/javascript'>alert('Login failed');</script>";
+                        $_SESSION['attempt'] += 1;
+                        if($_SESSION['attempt']>=3)
+                        {
+                            echo "<script type='text/javascript'>alert('Too many failed attempt, please wait');</script>";
+                            if(!isset($_SESSION['attempt_again'])) { //On évite d'augmenter le temps à chaque essai
+                                $_SESSION['attempt_again'] = time() + 15; //15s
+                            }
+                        } else
+                        {
+                            echo "<script type='text/javascript'>alert('Login failed');</script>";
+                        }
                     }
                 } else {
                     echo "<script type='text/javascript'>alert('User does not exist');</script>";
                 }
-            } catch(PDOException $e) {
+            } catch (PDOException $e) {
                 // Print PDOException message
                 echo $e->getMessage();
             }
         } else {
             echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
-        }
     }
 ?>
 
