@@ -27,7 +27,7 @@
     
             if (empty($data)) {
                 // Vérifier que le mot de passe contient au moins 8 char et un chiffre
-                if(strlen($_POST['password']) >= 8 && preg_match('~[0-9]+~', $_POST['password'])) {
+                if(passwordPolicy($_POST['password'])) {
                     // Les valeurs pour validite et admin doivent être 1 ou 0
                     if(($_POST['validite'] == '0' || $_POST['validite'] == '1') && ($_POST['admin'] == '0' || $_POST['admin'] == '1')) {
                         $sth = $file_db->prepare('INSERT INTO user (login, nom, prenom, password, validite, admin) VALUES (?, ?, ?, ?, ?, ?)');
@@ -38,7 +38,7 @@
                         echo "<script type='text/javascript'>alert('Validite and admin value must be 0 or 1');</script>";
                     }
                 } else {
-                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length, contain a number and an upper case');</script>";
                 }
             } else {
                 echo "<script type='text/javascript'>alert('User already exists');</script>";

@@ -7,7 +7,7 @@
     } else {
         $user = $_SESSION['userLogin'];
     }
-
+    include_once 'utils.php';
     if(isset($_POST['sbmt-edit'])) {
         $csrf_token = filter_input(INPUT_POST, 'csrf_token', FILTER_SANITIZE_STRING);
         if(!$csrf_token || $csrf_token !== $_SESSION['csrf_token']) {
@@ -26,7 +26,7 @@
                 $password = $_POST['inputPassword'];
                 if ($password == $_POST['inputPassword2']) {
                     // Vérifier que le mot de passe contient au moins 8 char et un chiffre
-                    if(strlen($_POST['inputPassword']) >= 8 && preg_match('~[0-9]+~', $_POST['inputPassword'])) {
+                    if(passwordPolicy($_POST['inputPassword'])) {
 
                         $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
                         $sth->execute(array(hash('sha256', $password), $user));
