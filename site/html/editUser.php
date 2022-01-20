@@ -8,14 +8,6 @@
     include_once 'utils.php';
     $file_db = dbConnection();
 
-    if (isset($_POST['validite'])) {    // Traitement d'un submit pour une mise à jour
-        $sth = $file_db->prepare('UPDATE user SET validite = ?, admin = ?, password = ? WHERE login = ?');
-        $sth->execute(array($_POST['validite'], $_POST['role'], $_POST['password'], $_POST['inputLogin']));
-
-        //$file_db->exec("UPDATE user SET validite = {$_POST['validite']}, admin = {$_POST['role']}, password = '{$_POST['password']}' WHERE login = '{$_POST['inputLogin']}'");
-        header('Location: index.php');
-    }
-
     $userToEdit = "";
     if(!isset($_GET['login'])) {        // Il est obligatoire d'avoir un id user en paramètre
         header('Location: login.php');
@@ -30,10 +22,41 @@
         header('Location: index.php');
     }
 
-    $sth = $file_db->prepare('SELECT login, validite, admin, password FROM user WHERE login = ?');
+    $sth = $file_db->prepare('SELECT login, validite, admin FROM user WHERE login = ?');
     $sth->execute(array($userToEdit));
     $userData = $sth->fetch();
-    //$userData = $file_db->query("SELECT login, validite, admin, password FROM user WHERE login = '{$userToEdit}'")->fetch();
+
+    if (isset($_POST['sbmt-edit'])) {
+        if (isset($_POST['inputLogin']) && isset($_POST['validite']) && isset($_POST['role']) && isset($_POST['password'])) {
+            $file_db = dbConnection();
+    
+            // Vérifier que l'utilisateur existe
+            $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
+            $sth->execute(array($_POST['inputLogin']));
+            $data = $sth->fetch();
+    
+            if (!empty($data)) {
+                // Vérifier que le mot de passe contient au moins 8 char et un chiffre
+                if(strlen($_POST['password']) >= 8 && preg_match('~[0-9]+~', $_POST['password'])) {
+                    // Les valeurs pour validite et role doivent être 1 ou 0
+                    if(($_POST['validite'] == '0' || $_POST['validite'] == '1') && ($_POST['role'] == '0' || $_POST['role'] == '1')) {
+                        $sth = $file_db->prepare('UPDATE user SET validite = ?, admin = ?, password = ? WHERE login = ?');
+                        $sth->execute(array($_POST['validite'], $_POST['role'], hash('sha256', $_POST['password']), $_POST['inputLogin']));
+
+                        header('Location: index.php');
+                    } else {
+                        echo "<script type='text/javascript'>alert('Validite and role value must be 0 or 1');</script>";
+                    }
+                } else {
+                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                }
+            } else {
+                echo "<script type='text/javascript'>alert('User does not exists');</script>";
+            }   
+        } else {
+            echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
+        }
+    }
 ?>
 
 
@@ -45,7 +68,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Edit user</title>
+    <title>Modifier utilisateur</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
@@ -66,9 +89,9 @@
     <label for="role" class="sr-only">Rôle (admin = 1)</label>
     <input type="text" id="role" name="role" class="form-control" value="<?php echo $userData['admin'] ?>" required>
     <label for="password" class="sr-only">Mot de passe</label>
-    <input type="password" id="password" name="password" class="form-control" value="<?php echo $userData['password'] ?>" required>
+    <input type="password" id="password" name="password" class="form-control" required>
     <br>
-    <input type="submit" class="btn btn-lg btn-warning btn-block" value="Appliquer les modifs">
+    <input type="submit" name="sbmt-edit" class="btn btn-lg btn-warning btn-block" value="Appliquer les modifs">
 </form>
 
 

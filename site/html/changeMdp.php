@@ -8,17 +8,25 @@
         $user = $_SESSION['userLogin'];
     }
 
-    if(isset($_POST['inputPassword'])) {
-        $password = $_POST['inputPassword'];
-        if ($password != $_POST['inputPassword2']) {
-            echo "<script type='text/javascript'>alert('Les mots de passe ne correspondent pas');</script>";
-
-        } else {    // Changement du mdp
-            include 'dbConnect.php';
-
-            $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
-            $sth->execute(array($password, $user));
-            header('Location: index.php');
+    if(isset($_POST['sbmt-edit'])) {
+        if(isset($_POST['inputPassword']) && isset($_POST['inputPassword2'])) {
+            $password = $_POST['inputPassword'];
+            if ($password == $_POST['inputPassword2']) {
+                // Vérifier que le mot de passe contient au moins 8 char et un chiffre
+                if(strlen($_POST['inputPassword']) >= 8 && preg_match('~[0-9]+~', $_POST['inputPassword'])) {
+                    include 'dbConnect.php';
+    
+                    $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
+                    $sth->execute(array(hash('sha256', $password), $user));
+                    header('Location: index.php');
+                } else {
+                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                }
+            } else {
+                echo "<script type='text/javascript'>alert('Les mots de passe ne correspondent pas');</script>";
+            }
+        } else {
+            echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
         }
     }
 
@@ -55,7 +63,7 @@
     <label for="inputPassword2" class="sr-only">Confirmer le nouveau mot de passe</label>
     <input type="password" id="inputPassword2" name="inputPassword2" class="form-control" placeholder="Password" required >
 
-    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Valider">
+    <input type="submit" name="sbmt-edit" class="btn btn-lg btn-primary btn-block" value="Valider">
 </form>
 
 
