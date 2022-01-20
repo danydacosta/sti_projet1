@@ -15,21 +15,30 @@
             exit;
         }
         
-        if(isset($_POST['inputPassword']) && isset($_POST['inputPassword2'])) {
-            $password = $_POST['inputPassword'];
-            if ($password == $_POST['inputPassword2']) {
-                // Vérifier que le mot de passe contient au moins 8 char et un chiffre
-                if(strlen($_POST['inputPassword']) >= 8 && preg_match('~[0-9]+~', $_POST['inputPassword'])) {
-                    include 'dbConnect.php';
-    
-                    $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
-                    $sth->execute(array(hash('sha256', $password), $user));
-                    header('Location: index.php');
+        if(isset($_POST['inputPassword']) && isset($_POST['inputPassword2']) && isset($_POST['formerPassword'])) {
+            // Vérifier que le mot de passe fourni est correct
+            include 'dbConnect.php';
+            $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
+            $sth->execute(array($user));
+            $data = $sth->fetch();
+
+            if(hash('sha256', $_POST['formerPassword']) == $data["password"]) {
+                $password = $_POST['inputPassword'];
+                if ($password == $_POST['inputPassword2']) {
+                    // Vérifier que le mot de passe contient au moins 8 char et un chiffre
+                    if(strlen($_POST['inputPassword']) >= 8 && preg_match('~[0-9]+~', $_POST['inputPassword'])) {
+
+                        $sth = $file_db->prepare('UPDATE user SET password = ? WHERE login = ?');
+                        $sth->execute(array(hash('sha256', $password), $user));
+                        header('Location: index.php');
+                    } else {
+                        echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                    }
                 } else {
-                    echo "<script type='text/javascript'>alert('Password must be min 8 caracters length and contain a number');</script>";
+                    echo "<script type='text/javascript'>alert('Les mots de passe ne correspondent pas');</script>";
                 }
             } else {
-                echo "<script type='text/javascript'>alert('Les mots de passe ne correspondent pas');</script>";
+                echo "<script type='text/javascript'>alert('Login failed');</script>";
             }
         } else {
             echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
@@ -63,8 +72,11 @@
 <form class="form-signin" method="POST">
     <h1 class="h3 mb-3 font-weight-normal">Changer le mot de passe</h1>
 
+    <label for="formerPassword" class="sr-only">Ancien mot de passe</label>
+    <input type="password" id="formerPassword" name="formerPassword" class="form-control" placeholder="Password" required autofocus>
+
     <label for="inputPassword" class="sr-only">Nouveau mot de passe</label>
-    <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required autofocus>
+    <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
 
     <label for="inputPassword2" class="sr-only">Confirmer le nouveau mot de passe</label>
     <input type="password" id="inputPassword2" name="inputPassword2" class="form-control" placeholder="Password" required >
