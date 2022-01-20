@@ -54,6 +54,7 @@
             }
         } else {
             echo "<script type='text/javascript'>alert('All parameters must be filled!');</script>";
+        }
     }
 ?>
 
