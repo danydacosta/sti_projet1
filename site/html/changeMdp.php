@@ -9,6 +9,12 @@
     }
 
     if(isset($_POST['sbmt-edit'])) {
+        $csrf_token = filter_input(INPUT_POST, 'csrf_token', FILTER_SANITIZE_STRING);
+        if(!$csrf_token || $csrf_token !== $_SESSION['csrf_token']) {
+            header($_SERVER['SERVER_PROTOCOL'].' 405 Method Not Allowed');
+            exit;
+        }
+        
         if(isset($_POST['inputPassword']) && isset($_POST['inputPassword2'])) {
             $password = $_POST['inputPassword'];
             if ($password == $_POST['inputPassword2']) {
@@ -63,6 +69,7 @@
     <label for="inputPassword2" class="sr-only">Confirmer le nouveau mot de passe</label>
     <input type="password" id="inputPassword2" name="inputPassword2" class="form-control" placeholder="Password" required >
 
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?: '' ?>" />
     <input type="submit" name="sbmt-edit" class="btn btn-lg btn-primary btn-block" value="Valider">
 </form>
 

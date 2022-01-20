@@ -26,7 +26,17 @@
     $sth->execute(array($userToEdit));
     $userData = $sth->fetch();
 
+    if(empty($userData)) {
+        header('Location: index.php');
+    }
+
     if (isset($_POST['sbmt-edit'])) {
+        $csrf_token = filter_input(INPUT_POST, 'csrf_token', FILTER_SANITIZE_STRING);
+        if(!$csrf_token || $csrf_token !== $_SESSION['csrf_token']) {
+            header($_SERVER['SERVER_PROTOCOL'].' 405 Method Not Allowed');
+            exit;
+        }
+
         if (isset($_POST['inputLogin']) && isset($_POST['validite']) && isset($_POST['role']) && isset($_POST['password'])) {
             $file_db = dbConnection();
     
@@ -91,6 +101,7 @@
     <label for="password" class="sr-only">Mot de passe</label>
     <input type="password" id="password" name="password" class="form-control" required>
     <br>
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?: '' ?>" />
     <input type="submit" name="sbmt-edit" class="btn btn-lg btn-warning btn-block" value="Appliquer les modifs">
 </form>
 

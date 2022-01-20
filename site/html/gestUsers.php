@@ -70,7 +70,7 @@
                                             <button type="button" class="btn btn-warning btn-sm" onclick=\'window.location.href = "editUser.php?login='.$row['login'].'"\'>
                                                 Modifier
                                             </button>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick=\'window.location.href = "delUser.php?login='.$row['login'].'"\'>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick=\'window.location.href = "delUser.php?login='.$row['login'].'&csrf_token='.$_SESSION['csrf_token'].'"\'>
                                                 Supprimer
                                             </button>
                                         </td>

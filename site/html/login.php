@@ -17,6 +17,7 @@
                     } else if(hash('sha256', $password) == $data["password"]) {    // Credentials justes, login accepté
                         session_start();
                         $_SESSION["userLogin"] = $login;
+                        $_SESSION['csrf_token'] = md5(uniqid(mt_rand(), true));
                         header('Location: '."index.php");
                         exit;
                     } else {

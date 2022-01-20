@@ -13,6 +13,12 @@
     } 
     
     if(isset($_POST['submit'])) {
+        $csrf_token = filter_input(INPUT_POST, 'csrf_token', FILTER_SANITIZE_STRING);
+        if(!$csrf_token || $csrf_token !== $_SESSION['csrf_token']) {
+            header($_SERVER['SERVER_PROTOCOL'].' 405 Method Not Allowed');
+            exit;
+        }
+        
         if(isset($_POST['destinataire']) && isset($_POST['sujet']) && isset($_POST['corps'])) {
             include('dbConnect.php');
             $sth = $file_db->prepare('SELECT * FROM user WHERE login = ?');
@@ -103,6 +109,7 @@
                         <textarea required class="form-control" name="corps" rows="3"><?php echo $_POST['corps']; ?></textarea>
                     </div>
                     <br />
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?: '' ?>" />
                     <button type="submit" class="btn btn-success" name="submit">
                         Envoyer
                     </button>
